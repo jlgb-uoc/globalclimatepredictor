@@ -5,7 +5,8 @@ Este repositorio se crea para la Práctica 2 de la asignatura _Tipología y cicl
 Este repositorio ha sido creado por Francisco Alonso Sarria y Jose Luis Garcia Bravo
 ## Organización del repositorio
 En el directorio _/src_ se encuentran los ficheros fuentes usados para recopilar y analizar los datos.
-En el directorio _/grass_ se encuentra el codigo de GRASS utilizado para incorporar los datos geograficos a los datos de temperatura.
+En el directorio _/grass_ se encuentra el codigo de GRASS utilizado para incorporar los datos geograficos a los datos de temperatura y el correspondiente resultado.
+En el directori _/doc_ se encuentra la memoria que resume los resultados obtenidos
 
 ## Ultima actualización de los datos
 20 de Diciembre de 2020
