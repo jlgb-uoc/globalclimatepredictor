@@ -12,8 +12,11 @@ En el directorio _/grass_ se encuentra el codigo de GRASS utilizado para incorpo
 
 ## Fuentes
 El dataset base para los datos esta en la web de Kaggle:
+
 https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data
+
 El raster de elevacion esta descargado de :
+
 https://www.eea.europa.eu/data-and-maps/data/world-digital-elevation-model-etopo5/
 zipped-dem-geotiff-raster-geographic-tag-image-file-format-raster-data
 ## Utilización
