@@ -1,14 +1,10 @@
-Due to the big size of the data (8599212 rows), the processing has been divided in 2 steps.
-
 Debido al gran tamaño de los datos (8599212 filas), el procesado se ha dividido en varios pasos. En cada fichero se realizan calculos diferentes e independientes que intentan analizar los datos desde diferentes puntos de vista focalizando en algun tema por separado.
 
+_Cleaning.Rmd_ realiza unos primeros calculos y un filtrado de los datos, escribiendo un fichero intermedio llamado _ReducedData.csv_, acelerando de esta manera la ejecucion de algunos de los otros ficheros que usan estos datos precalculados, ademas de eliminar informacion no necesaria.
 
-On the first step, we choose the data we're working on, based on the existence of non-informed temperatures.
+_Solstice.Rmd_ se utiliza para encontrar la relacion entre el mes de año y la temperatura media. Aunque 
 
-_Cleaning.Rmd_ does first calculations and filtering of the required data, and writes an intermediate file _ReducedData.csv_ so we can have a reduced amount of data to work easily with R
-We eliminate City, Country and Temperature uncertainty information because we're not using it in the model
-We are transformating latitude and longitude to integer positive and negative values
-We extract date information keeping only year and month
+_Deviation.Rmd_ realiza calculos de desviacion tipica para encontrar los paises y con mayor y menor varianza de temperatura, elevacion y distancia al mar para ver como esos parametros influyen en los modelos aplicados
 
-_GobalTrend.Rmd
+_GobalTrend.Rmd_ realiza un estudio simple de la tendencia de la temperatura a nivel global y particularizando en la ciudad y pais de los que disponemos de mayor numero de datos
 
