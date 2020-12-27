@@ -1,0 +1,51 @@
+---
+title: "Initial Cleaning and reducing"
+author: "Jose Luis Garcia Bravo and Francisco Alonso Sarria"
+date: "22/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(rgdal)
+library(raster)
+library(sp)
+library(lubridate)
+library(DescTools)
+library(randomForest)
+library(simputation)
+
+readLL = Vectorize(function(x) {
+  n = nchar(x)
+  dir = substr(x, n, n)
+  x = as.numeric(substr(x,1,n-1))
+  if (dir %in% c("S","W")) m = -1 else m = 1
+  return(m*x)
+})
+
+datos = read.table("GlobalLandTemperaturesByCity.csv",header=TRUE, sep=",", quote="\"")
+
+datos$Longitude = readLL(datos$Longitude)
+datos$Latitude = readLL(datos$Latitude)
+datos$fecha = ymd(datos$dt)
+datos$year = year(datos$fecha)
+datos$mes = month(datos$fecha)
+datos$AbsLat = abs(datos$Latitude)
+
+datos2 = datos[which(datos$year>=1900 & datos$year<2013),]
+
+#We eliminate from the final file the values we're not using
+datos2$dt <- NULL
+datos2$fecha <- NULL
+datos2$AverageTemperatureUncertainty <- NULL
+datos2$City <- NULL
+datos2$Country <- NULL
+
+write.table(datos2,"ReducedData.csv",col.names = TRUE, sep=",")
+
+```
+

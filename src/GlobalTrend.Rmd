@@ -1,0 +1,155 @@
+---
+title: "Global Temperature Trend"
+author: "Jose Luis Garcia Bravo and Francisco Alonso Sarria"
+date: "23/12/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Vamos cargar los datos de todos los años, y quedarnos con la parte entre el 1900 y 2013 que ya sabemos que son datos completos.
+
+```{r message= FALSE,warning = FALSE, error = FALSE,echo=FALSE}
+library(lubridate)
+datos = read.table("GlobalLandTemperaturesByCity.csv",header=TRUE, sep=",", quote="\"")
+
+datos$fecha = ymd(datos$dt)
+datos$year = year(datos$fecha)
+
+datos2 = datos[which(datos$year>=1900 & datos$year<2013),]
+datos <- NULL
+
+```
+
+Vamos a intentar predecir la media de la temperatura global en funcion del año, asi que promediaremos todos los datos que tenemos
+
+```{r}
+
+years <- unique(datos2$year)
+temperatures <- years
+for (i in 1:length(years)){
+  temperatures[i] <- mean(datos2[datos2$year == years[i], ]$AverageTemperature)
+  
+}
+
+data <- data.frame(years,temperatures)
+
+```
+
+Como vamos a ver, hay una clara diferencia entre los años anteriores y posteriores a 1970, asi que crearemos un modelo para todos los datos, y otro modelo para los años hasta y desde 1970.
+
+```{r,fig.height=4, fig.width=10 }
+
+par(mfrow=c(1,2))
+plot(years,temperatures,
+     main = "World Average Temperature (1900-2013)", xlab = "Year",ylab = "Temperature")
+plot(data[data$years > 1970,]$years,data[data$years > 1970,]$temperatures,
+     main = "World Average Temperature (1971-2013)", xlab = "Year",ylab = "Temperature")
+```
+
+```{r,fig.height=5, fig.width=10 }
+
+model <- lm(temperatures ~years, data = data)
+summary(model)
+model1 <- lm(temperatures ~years, data = data[data$years < 1971,])
+summary(model1)
+model2 <- lm(temperatures ~years, data = data[data$years > 1970,])
+summary(model2)
+
+plot(years,temperatures,
+     main = "World Average Temperature (1900-2013)", xlab = "Year",ylab = "Temperature")
+abline(model)
+plot(data[data$years < 1971,]$years,data[data$years < 1971,]$temperatures,
+     main = "World Average Temperature (1900-1970)", xlab = "Year",ylab = "Temperature")
+abline(model1)
+plot(data[data$years > 1970,]$years,data[data$years > 1970,]$temperatures,
+     main = "World Average Temperature (1971-2013)", xlab = "Year",ylab = "Temperature")
+abline(model2)
+
+```
+Como podemos ver, segun el modelo de los datos ( _R-squared_ de 0.7554), desde 1971 la temperatura esta subiendo a razon de 0.023º al año.
+
+Vamos a intentar calcular el mismo modelo, pero solo para una ciudad y un pais, que elegiremos en funcion del numero de datos que tengamos
+
+```{r}
+
+tail(names(sort(table(datos2$City))), 1)
+tail(names(sort(table(datos2$Country))), 1)
+
+```
+```{r echo = FALSE}
+datos3 <- datos2[datos2$City == "Worcester",]
+
+years <- unique(datos3$year)
+temperatures <- years
+for (i in 1:length(years)){
+  temperatures[i] <- mean(datos3[datos3$year == years[i], ]$AverageTemperature)
+  
+}
+
+data <- data.frame(years,temperatures)
+
+
+```
+
+```{r,fig.height=5, fig.width=10, echo = FALSE}
+
+model <- lm(temperatures ~years, data = data)
+summary(model)
+model1 <- lm(temperatures ~years, data = data[data$years < 1971,])
+summary(model1)
+model2 <- lm(temperatures ~years, data = data[data$years > 1970,])
+summary(model2)
+
+plot(years,temperatures,
+     main = "Worcester Average Temperature (1900-2013)", xlab = "Year",ylab = "Temperature")
+abline(model)
+plot(data[data$years < 1971,]$years,data[data$years < 1971,]$temperatures,
+     main = "Worcester Temperature (1900-1970)", xlab = "Year",ylab = "Temperature")
+abline(model1)
+plot(data[data$years > 1970,]$years,data[data$years > 1970,]$temperatures,
+     main = "Worcester Temperature (1971-2013)", xlab = "Year",ylab = "Temperature")
+abline(model2)
+
+```
+
+```{r echo = FALSE}
+datos4 <- datos2[datos2$Country == "India",]
+
+years <- unique(datos4$year)
+temperatures <- years
+for (i in 1:length(years)){
+  temperatures[i] <- mean(datos4[datos4$year == years[i], ]$AverageTemperature)
+  
+}
+
+data <- data.frame(years,temperatures)
+
+
+```
+
+```{r,fig.height=5, fig.width=10,echo = FALSE }
+
+model <- lm(temperatures ~years, data = data)
+summary(model)
+model1 <- lm(temperatures ~years, data = data[data$years < 1971,])
+summary(model1)
+model2 <- lm(temperatures ~years, data = data[data$years > 1970,])
+summary(model2)
+
+plot(years,temperatures,
+     main = "India Average Temperature (1900-2013)", xlab = "Year",ylab = "Temperature")
+abline(model)
+plot(data[data$years < 1971,]$years,data[data$years < 1971,]$temperatures,
+     main = "India Temperature (1900-1970)", xlab = "Year",ylab = "Temperature")
+abline(model1)
+plot(data[data$years > 1970,]$years,data[data$years > 1970,]$temperatures,
+     main = "India Temperature (1971-2013)", xlab = "Year",ylab = "Temperature")
+abline(model2)
+
+```
+Aunque estamos obteniendo valores de incremento de temperatura por año muy similares a los obtenidos por los datos globales, el valor de _R-squared_ es muy bajo para considerarlos un buen modelo

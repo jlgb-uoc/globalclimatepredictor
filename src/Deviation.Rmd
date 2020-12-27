@@ -1,0 +1,115 @@
+---
+title: "Deviation Calculations"
+author: "Jose Luis Garcia Bravo and Francisco Alonso Sarria"
+date: "22/12/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r message= FALSE,warning = FALSE, error = FALSE,echo=FALSE}
+library(rgdal)
+library(raster)
+library(sp)
+library(lubridate)
+library(DescTools)
+library(randomForest)
+library(simputation)
+
+readLL = Vectorize(function(x) {
+  n = nchar(x)
+  dir = substr(x, n, n)
+  x = as.numeric(substr(x,1,n-1))
+  if (dir %in% c("S","W")) m = -1 else m = 1
+  return(m*x)
+})
+
+datos = read.table("GlobalLandTemperaturesByCity.csv",header=TRUE, sep=",", quote="\"")
+
+datos$Longitude = readLL(datos$Longitude)
+datos$Latitude = readLL(datos$Latitude)
+datos$fecha = ymd(datos$dt)
+datos$year = year(datos$fecha)
+datos$mes = month(datos$fecha)
+datos$AbsLat = abs(datos$Latitude)
+
+datos2 = datos[which(datos$year>=1900 & datos$year<2013),]
+datos <- NULL
+
+#We eliminate from the final file the values we're not using
+datos2$dt <- NULL
+datos2$fecha <- NULL
+datos2$AverageTemperatureUncertainty <- NULL
+datos2$City <- NULL
+
+
+coordinates(datos2) =~ Longitude+Latitude
+proj4string(datos2) = CRS("+init=epsg:4326")
+MDE=raster::raster("alwdgg.tif")
+distSea=raster::raster("distSea.tif")
+proj4string(MDE) = CRS("+init=epsg:4326")
+proj4string(distSea) = CRS("+init=epsg:4326")
+datos2$elev = raster::extract(MDE, datos2)
+datos2$dist = raster::extract(distSea, datos2)
+
+
+```
+
+```{r}
+
+countries <- unique(datos2$Country)
+elevations <- countries
+distances <- countries
+temperatures <- countries
+for (i in 1:length(countries)){
+  elevations[i] <- sd(datos2[datos2$Country == countries[i], ]$elev)
+  distances[i] <- sd(datos2[datos2$Country == countries[i], ]$dist)
+  temperatures[i] <- sd(datos2[datos2$Country == countries[i], ]$AverageTemperature)
+  
+}
+new_data <- data.frame(countries,temperatures,elevations,distances)
+
+```
+
+```{r}
+
+new_data$temperatures <- as.numeric(new_data$temperatures)
+new_data$elevations <- as.numeric(new_data$elevations)
+new_data$distances <- as.numeric(new_data$distances)
+
+```
+
+```{r}
+#temperatures
+head(new_data[order(new_data$temperatures),]) #Low temperature deviation
+tail(new_data[order(new_data$temperatures),]) #High temperature deviation
+
+
+
+temp <- new_data[new_data$elevations > 0,]
+head(temp[order(temp$elevations),]) #Low elevation deviation
+tail(temp[order(temp$elevations),]) #High elevation deviation
+
+
+
+temp <- new_data[new_data$distances > 0,]
+head(temp[order(temp$distances),]) #Low sea distance deviation
+tail(temp[order(temp$distances),]) #High sea distance deviation
+
+
+```
+
+```{r}
+length(which(datos2$Country =="Malaysia")) #Low temperature deviation
+length(which(datos2$Country =="Canada")) #High temperature deviation
+length(which(datos2$Country =="Czech Republic")) #Low Elevation deviation
+length(which(datos2$Country =="Chile")) #High elevation deviation
+length(which(datos2$Country =="Dominican Republic")) #Low Distance deviation
+length(which(datos2$Country =="Russia")) #High Distance deviation
+```
+
