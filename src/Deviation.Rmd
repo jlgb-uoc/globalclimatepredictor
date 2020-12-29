@@ -113,3 +113,56 @@ length(which(datos2$Country =="Dominican Republic")) #Low Distance deviation
 length(which(datos2$Country =="Russia")) #High Distance deviation
 ```
 
+```{r}
+
+datos2$solst= ifelse(datos2$Latitude<0,cos(2*pi*(datos2$mes-1)/12),-cos(2*pi*(datos2$mes-1)/12))
+
+dMalaysia = datos2[datos2$Country =="Malaysia",]
+dCanada = datos2[datos2$Country =="Canada",]
+dCzech = datos2[datos2$Country =="Czech Republic",]
+dChile = datos2[datos2$Country =="Chile",]
+dDomRep = datos2[datos2$Country =="Dominican Republic",]
+dRussia = datos2[datos2$Country =="Russia",]
+
+```
+
+```{r}
+mMalaysia <- lm(AverageTemperature~year+solst+AbsLat+Longitude+elev+dist, dMalaysia)
+summary(mMalaysia) #Low temperature deviation
+
+mCanada <- lm(AverageTemperature~year+solst+AbsLat+Longitude+elev+dist, dCanada)
+summary(mCanada) #High temperature deviation
+
+mCzech <- lm(AverageTemperature~year+solst+AbsLat+Longitude+elev+dist, dCzech)
+summary(mCzech) #Low Elevation deviation
+
+mChile <- lm(AverageTemperature~year+solst+AbsLat+Longitude+elev+dist, dChile)
+summary(mChile) #High elevation deviation
+
+mDomRep <- lm(AverageTemperature~year+solst+AbsLat+Longitude+elev+dist, dDomRep)
+summary(mDomRep) #Low Distance deviation
+
+mRussia <- lm(AverageTemperature~year+solst+AbsLat+Longitude+elev+dist, dRussia)
+summary(mRussia) #High Distance deviation
+
+
+```
+
+```{r}
+par(mfrow=c(2,2))
+plot(mMalaysia) #Low temperature deviation
+par(mfrow=c(2,2))
+plot(mCanada) #High temperature deviation
+par(mfrow=c(2,2))
+plot(mCzech) #Low Elevation deviation
+par(mfrow=c(2,2))
+plot(mChile) #High Elevation deviation
+par(mfrow=c(2,2))
+plot(mDomRep) #Low Distance deviation
+par(mfrow=c(2,2))
+plot(mRussia) #High Distance deviation
+
+
+```
+
+```

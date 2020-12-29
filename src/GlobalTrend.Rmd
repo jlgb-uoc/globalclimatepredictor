@@ -40,7 +40,7 @@ data <- data.frame(years,temperatures)
 
 ```
 
-Como vamos a ver, hay una clara diferencia entre los años anteriores y posteriores a 1970, asi que crearemos un modelo para todos los datos, y otro modelo para los años hasta y desde 1970.
+Como vamos a ver, parece haber una diferencia entre los años anteriores y posteriores a 1970, asi que crearemos un modelo para todos los datos, y otro modelo para los años hasta y desde 1970.
 
 ```{r,fig.height=4, fig.width=10 }
 
