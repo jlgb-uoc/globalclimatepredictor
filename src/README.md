@@ -8,7 +8,11 @@ _GobalTrend.Rmd_ realiza un estudio simple de la tendencia de la temperatura a n
 
 _Deviation.Rmd_ realiza calculos de desviacion tipica para encontrar los paises y con mayor y menor varianza de temperatura, elevacion y distancia al mar para ver como esos parametros influyen en los modelos aplicados
 
-_GlobalClimatePredictor.Rmd_ realiza un analisis mas exhaustivo de los datos desde varios puntos de vista. Debido a la extension del dataset y el tamaño de los graficos, es necesaria una buena cantidad de memoria para poder ejecutar el fichero.
+_GlobalClimatePredictor.R_ es el codigo R que  realiza un analisis mas exhaustivo de los datos desde varios puntos de vista. Debido a la extension del dataset y el tamaño de los graficos, es necesaria una buena cantidad de memoria para poder ejecutar el fichero.
+
+_GlobalClimatePredictor.Rmd_ es un fichero de R Markdown para la generación del informe final.
+
+
 
 
 
