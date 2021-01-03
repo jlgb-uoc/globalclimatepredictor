@@ -10,7 +10,6 @@ _Deviation.Rmd_ realiza calculos de desviacion tipica para encontrar los paises 
 
 _GlobalClimatePredictor.R_ es el codigo R que  realiza un analisis mas exhaustivo de los datos desde varios puntos de vista. Debido a la extension del dataset y el tamaño de los graficos, es necesaria una buena cantidad de memoria para poder ejecutar el fichero.
 
-_GlobalClimatePredictor.Rmd_ es un fichero de R Markdown para la generación del informe final.
 
 
 
